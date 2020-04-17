@@ -28,11 +28,15 @@ def interact(env, agent, num_episodes=20000, window=100):
     for i_episode in range(1, num_episodes+1):
         # begin the episode
         state = env.reset()
+        # calculate epsilon
+        epsilon = agent.calculate_epsilon(i_episode, num_episodes)
         # initialize the sampled reward
         samp_reward = 0
         while True:
+            # calculate epsilon greedy policy probs
+            probs = agent.epsilon_greedy_policy_probs(state, epsilon)
             # agent selects an action
-            action = agent.select_action(state)
+            action = agent.select_action(state, probs)
             # agent performs the selected action
             next_state, reward, done, _ = env.step(action)
             # agent performs internal updates based on sampled experience
